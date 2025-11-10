@@ -1,0 +1,149 @@
+{
+  "Resources": {
+    "Ec2SecurityGroup55889913": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "Security group for EC2 instance",
+        "SecurityGroupEgress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1"
+          }
+        ],
+        "SecurityGroupIngress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow SSH access",
+            "FromPort": 22,
+            "IpProtocol": "tcp",
+            "ToPort": 22
+          },
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow HTTP access",
+            "FromPort": 80,
+            "IpProtocol": "tcp",
+            "ToPort": 80
+          }
+        ],
+        "VpcId": "vpc-0d554ea13c7166305"
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkStack/Ec2SecurityGroup/Resource"
+      }
+    },
+    "MyEc2InstanceInstanceRole288C5C88": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "ec2.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": {
+              "Ref": "Environment"
+            }
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkStack/MyEc2Instance/InstanceRole/Resource"
+      }
+    },
+    "MyEc2InstanceInstanceProfile829F17AB": {
+      "Type": "AWS::IAM::InstanceProfile",
+      "Properties": {
+        "Roles": [
+          {
+            "Ref": "MyEc2InstanceInstanceRole288C5C88"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkStack/MyEc2Instance/InstanceProfile"
+      }
+    },
+    "MyEc2InstanceEC255155": {
+      "Type": "AWS::EC2::Instance",
+      "Properties": {
+        "AvailabilityZone": "us-east-1a",
+        "IamInstanceProfile": {
+          "Ref": "MyEc2InstanceInstanceProfile829F17AB"
+        },
+        "ImageId": {
+          "Ref": "SsmParameterValueawsserviceamiamazonlinuxlatestamzn2amikernel510hvmx8664gp2C96584B6F00A464EAD1953AFF4B05118Parameter"
+        },
+        "InstanceType": "t3.micro",
+        "SecurityGroupIds": [
+          {
+            "Fn::GetAtt": [
+              "Ec2SecurityGroup55889913",
+              "GroupId"
+            ]
+          }
+        ],
+        "SubnetId": "subnet-0147e238f3856e40c",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": {
+              "Ref": "Environment"
+            }
+          }
+        ],
+        "UserData": {
+          "Fn::Base64": "#!/bin/bash\nyum update -y\nyum install -y httpd\nsystemctl start httpd\nsystemctl enable httpd\necho \"<h1>Hello from CDK EC2 Instance!</h1>\" > /var/www/html/index.html"
+        }
+      },
+      "DependsOn": [
+        "MyEc2InstanceInstanceRole288C5C88"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "CdkStack/MyEc2Instance/Resource"
+      }
+    }
+  },
+  "Parameters": {
+    "Environment": {
+      "Type": "String",
+      "Default": "dev",
+      "AllowedValues": [
+        "dev",
+        "staging",
+        "prod"
+      ],
+      "Description": "Deployment environment (dev, staging, prod)"
+    },
+    "SsmParameterValueawsserviceamiamazonlinuxlatestamzn2amikernel510hvmx8664gp2C96584B6F00A464EAD1953AFF4B05118Parameter": {
+      "Type": "AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>",
+      "Default": "/aws/service/ami-amazon-linux-latest/amzn2-ami-kernel-5.10-hvm-x86_64-gp2"
+    },
+    "BootstrapVersion": {
+      "Type": "AWS::SSM::Parameter::Value<String>",
+      "Default": "/cdk-bootstrap/hnb659fds/version",
+      "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+    }
+  },
+  "Outputs": {
+    "InstancePublicIP": {
+      "Description": "Public IP address of the EC2 instance",
+      "Value": {
+        "Fn::GetAtt": [
+          "MyEc2InstanceEC255155",
+          "PublicIp"
+        ]
+      }
+    }
+  }
+}

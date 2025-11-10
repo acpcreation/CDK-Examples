@@ -33,8 +33,7 @@ Resources:
         Version: "2012-10-17"
       Tags:
         - Key: Name
-          Value:
-            Ref: Environment
+          Value: CdkStack/MyEc2Instance
     Metadata:
       aws:cdk:path: CdkStack/MyEc2Instance/InstanceRole/Resource
   MyEc2InstanceInstanceProfile829F17AB:
@@ -60,8 +59,7 @@ Resources:
       SubnetId: subnet-0147e238f3856e40c
       Tags:
         - Key: Name
-          Value:
-            Ref: Environment
+          Value: CdkStack/MyEc2Instance
       UserData:
         Fn::Base64: |-
           #!/bin/bash
@@ -75,21 +73,9 @@ Resources:
     Metadata:
       aws:cdk:path: CdkStack/MyEc2Instance/Resource
 Parameters:
-  Environment:
-    Type: String
-    Default: dev
-    AllowedValues:
-      - dev
-      - staging
-      - prod
-    Description: Deployment environment (dev, staging, prod)
   SsmParameterValueawsserviceamiamazonlinuxlatestamzn2amikernel510hvmx8664gp2C96584B6F00A464EAD1953AFF4B05118Parameter:
     Type: AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>
     Default: /aws/service/ami-amazon-linux-latest/amzn2-ami-kernel-5.10-hvm-x86_64-gp2
-  BootstrapVersion:
-    Type: AWS::SSM::Parameter::Value<String>
-    Default: /cdk-bootstrap/hnb659fds/version
-    Description: Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]
 Outputs:
   InstancePublicIP:
     Description: Public IP address of the EC2 instance

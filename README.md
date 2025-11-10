@@ -24,4 +24,9 @@ The `cdk.json` file tells the CDK Toolkit how to execute your app.
 
 
 ## Prep for SG
-cdk synth > cloudformation/cf-template.json
+YAML: cdk synth --no-version-reporting > cloudformation/cf-template.yaml
+
+JSON:
+cdk synth --json --no-version-reporting > cloudformation/cf-template.json
+
+jq 'del(.Parameters.BootstrapVersion)' cloudformation/cf-template.json > cloudformation/cf-template-sg.json

@@ -34,6 +34,14 @@ export class CdkStack extends cdk.Stack {
       'Allow HTTP access'
     );
 
+    // Parameter for environment  
+    const environmentParam = new cdk.CfnParameter(this, 'Environment', {
+      type: 'String',
+      default: 'dev',
+      description: 'Deployment environment (dev, staging, prod)',
+      allowedValues: ['dev', 'staging', 'prod'],
+    });
+
     // Create the EC2 instance
     const ec2Instance = new ec2.Instance(this, 'MyEc2Instance', {
       vpc,
@@ -48,6 +56,8 @@ export class CdkStack extends cdk.Stack {
       },
       // keyName: 'your-key-pair-name', // Uncomment and add your key pair name for SSH access
     });
+
+    cdk.Tags.of(ec2Instance).add('Name', environmentParam.valueAsString);
 
     // Add user data to install and start a web server
     ec2Instance.addUserData(
