@@ -52,7 +52,15 @@
           {
             "Key": "Name",
             "Value": {
-              "Ref": "Environment"
+              "Fn::Join": [
+                "",
+                [
+                  "CloudFormation-Deployed-",
+                  {
+                    "Ref": "Environment"
+                  }
+                ]
+              ]
             }
           }
         ]
@@ -98,7 +106,15 @@
           {
             "Key": "Name",
             "Value": {
-              "Ref": "Environment"
+              "Fn::Join": [
+                "",
+                [
+                  "CloudFormation-Deployed-",
+                  {
+                    "Ref": "Environment"
+                  }
+                ]
+              ]
             }
           }
         ],

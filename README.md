@@ -23,10 +23,21 @@ The `cdk.json` file tells the CDK Toolkit how to execute your app.
 5. cdk bootstrap
 
 
-## Prep for SG
-YAML: cdk synth --no-version-reporting > cloudformation/cf-template.yaml
 
-JSON:
-cdk synth --json --no-version-reporting > cloudformation/cf-template.json
 
-jq 'del(.Parameters.BootstrapVersion)' cloudformation/cf-template.json > cloudformation/cf-template-sg.json
+# Prep for StackGuadian
+#### JSON:
+    cdk synth --json --no-version-reporting > cloudformation/cf-template.json
+    jq 'del(.Parameters.BootstrapVersion)' cloudformation/cf-template.json > cloudformation/cf-template-sg.json
+    rm cloudformation/cf-template.json
+
+#### YAML (Avoid): 
+    cdk synth --no-version-reporting > cloudformation/cf-template.yaml
+
+#### CONFIGURING TEMPLATE:
+1. EDIT the change-set and apply-set, name it
+2. Specify the cf-template-sg.json
+3. For UI AI search this: "use the below snippet to create a React JSONSchema Form"
+4. Remove unnecessary fields (like )
+5. Save and publish revision
+

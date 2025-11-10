@@ -57,7 +57,7 @@ export class CdkStack extends cdk.Stack {
       // keyName: 'your-key-pair-name', // Uncomment and add your key pair name for SSH access
     });
 
-    cdk.Tags.of(ec2Instance).add('Name', environmentParam.valueAsString);
+    cdk.Tags.of(ec2Instance).add('Name', "CloudFormation-Deployed-"+environmentParam.valueAsString);
 
     // Add user data to install and start a web server
     ec2Instance.addUserData(
