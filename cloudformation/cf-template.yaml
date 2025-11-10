@@ -72,20 +72,10 @@ Resources:
       - MyEc2InstanceInstanceRole288C5C88
     Metadata:
       aws:cdk:path: CdkStack/MyEc2Instance/Resource
-  CDKMetadata:
-    Type: AWS::CDK::Metadata
-    Properties:
-      Analytics: v2:deflate64:H4sIAAAAAAAA/7WSzU7DMBCEnwUfkRtopF56KyChnKhSOFUVctbb4tZZB/+0qqK8O07ioiIhbhwix6Pdb2czybN8Osvub8TJTUAeJlpVWbvyAg68RGeCBVyzW8b/eDY8Nr+3CHnsRAhW+fOzNaFZt+zYAJsPdRIdWNV4ZSgpQmtzWmj9EnxlAkk29zZgx1smpCxoZ9G5Mmhk8wgCQQVpRTgqfSVnYIgQeqRLzEDqM2Ahh2tEdYPBf2Fu+OOWfuzLC3JeUPxi14urJL6eG0xSLeAjji1qsbtI7hqUtMhYhYrQRyctc8NroixDpRWwLm325tA+CS/iWr8FNHq9uOu4EnXWlkb3RoVzoUb5cO5nNFYRqEboBUCMxF+SGmr6hgV8B9iN1F69pi+t2SqN0VkUl8KKGj3a/hJzboLvOBmJ2d7dHfNZNo2/3t4pNbFxmqoxK8fzCwc1bgqXAgAA
-    Metadata:
-      aws:cdk:path: CdkStack/CDKMetadata/Default
 Parameters:
   SsmParameterValueawsserviceamiamazonlinuxlatestamzn2amikernel510hvmx8664gp2C96584B6F00A464EAD1953AFF4B05118Parameter:
     Type: AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>
     Default: /aws/service/ami-amazon-linux-latest/amzn2-ami-kernel-5.10-hvm-x86_64-gp2
-  BootstrapVersion:
-    Type: AWS::SSM::Parameter::Value<String>
-    Default: /cdk-bootstrap/hnb659fds/version
-    Description: Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]
 Outputs:
   InstancePublicIP:
     Description: Public IP address of the EC2 instance
